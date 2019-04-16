@@ -4,5 +4,6 @@ public class Program {
         spn.readChiffre("chiffre.txt");
         //spn.dechiffre(file);
 
+
     }
 }
