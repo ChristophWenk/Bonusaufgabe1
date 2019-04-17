@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/*
+ * This class offers all methods which are needed to perform an encryption with a substitution-permutation-network (SPN)
+ */
 public class SPN {
 
     int r = 4;
@@ -43,28 +46,33 @@ public class SPN {
     }
 
     /*
-    * @param input Bit input to lookup in the SBox
-    * @return the value given by the SBox
+    * @param input 4-bit input to lookup in the SBox
+    * @return the 4-bit value given by the SBox
      */
     public String executeSBox(String input) {
         return sBox.get(input).toString();
     }
 
     /*
-     * @param input Bit input to lookup in the inverse SBox
-     * @return the value given by the inverse SBox
+     * @param input 4-bit input to lookup in the inverse SBox
+     * @return the 4-bit value given by the inverse SBox
      */
     public String executeInverseSBox(String input) {
         return sBox.getKey(input).toString();
     }
 
+    /*
+     * @param input 16-bit input to permute
+     * @return the value given by the permutation
+     */
     public String executeBitpermutation(String input) {
-        String[] targetString = new String[bitPermutation.length];
-
-
-        //int i = Integer.parseInt(input);
-
-        return input;
+        char[] charList = new char[input.length()];
+        for (int i = 0; i < input.length(); i++) {
+            int newBitPosition = bitPermutation[i];
+            charList[newBitPosition] = input.charAt(i);
+        }
+        String output = String.copyValueOf(charList);
+        return output;
     }
 
     /*
@@ -88,7 +96,4 @@ public class SPN {
         sBox.put("1110", "0000");    // E => 0
         sBox.put("1111", "0111");    // F => 7
     }
-
-
-
 }
