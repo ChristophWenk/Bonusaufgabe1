@@ -13,7 +13,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>(whatever version is current)</version>
+                <version>3.8.0</version>
                 <configuration>
                     <!-- or whatever version you use -->
                     <source>11</source>
@@ -29,6 +29,11 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
         </dependency>
     </dependencies>
 </project>

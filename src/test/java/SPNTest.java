@@ -18,6 +18,11 @@ public class SPNTest {
     }
 
     @Test
+    public void testinverseSBox() {
+        assertEquals("1101",spn.executeInverseSBox("1001"));
+    }
+
+    @Test
     public void testExecuteBitpermutation() {
         spn.executeBitpermutation("1");
         //assertEquals("");

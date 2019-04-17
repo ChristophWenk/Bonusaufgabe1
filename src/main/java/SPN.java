@@ -1,7 +1,9 @@
+import org.apache.commons.collections.BidiMap;
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 
 public class SPN {
 
@@ -21,26 +23,10 @@ public class SPN {
 
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
 
-    private HashMap<String, String> sBox = new HashMap<String, String>();
+    private BidiMap sBox = new DualHashBidiMap();
 
     public SPN() {
-        // Initialize S-Box
-        sBox.put("0000", "1110");    // 0 => E
-        sBox.put("0001", "0100");    // 1 => 4
-        sBox.put("0010", "1101");    // 2 => D
-        sBox.put("0011", "0000");    // 3 => 1
-        sBox.put("0100", "0100");    // 4 => 2
-        sBox.put("0101", "1111");    // 5 => F
-        sBox.put("0110", "1011");    // 6 => B
-        sBox.put("0111", "1000");    // 7 => 8
-        sBox.put("1000", "0011");    // 8 => 3
-        sBox.put("1001", "1010");    // 9 => A
-        sBox.put("1010", "0110");    // A => 6
-        sBox.put("1011", "1100");    // B => C
-        sBox.put("1100", "0101");    // C => 5
-        sBox.put("1101", "1001");    // D => 9
-        sBox.put("1110", "0000");    // E => 0
-        sBox.put("1111", "0111");    // F => 7
+        initializeSBox();
     }
 
     public void readChiffre(String file) {
@@ -61,7 +47,15 @@ public class SPN {
     * @return the value given by the SBox
      */
     public String executeSBox(String input) {
-        return sBox.get(input);
+        return sBox.get(input).toString();
+    }
+
+    /*
+     * @param input Bit input to lookup in the inverse SBox
+     * @return the value given by the inverse SBox
+     */
+    public String executeInverseSBox(String input) {
+        return sBox.getKey(input).toString();
     }
 
     public String executeBitpermutation(String input) {
@@ -72,5 +66,29 @@ public class SPN {
 
         return input;
     }
+
+    /*
+     * Initialize S-Box values
+     */
+    public void initializeSBox() {
+        sBox.put("0000", "1110");    // 0 => E
+        sBox.put("0001", "0100");    // 1 => 4
+        sBox.put("0010", "1101");    // 2 => D
+        sBox.put("0011", "0000");    // 3 => 1
+        sBox.put("0100", "0100");    // 4 => 2
+        sBox.put("0101", "1111");    // 5 => F
+        sBox.put("0110", "1011");    // 6 => B
+        sBox.put("0111", "1000");    // 7 => 8
+        sBox.put("1000", "0011");    // 8 => 3
+        sBox.put("1001", "1010");    // 9 => A
+        sBox.put("1010", "0110");    // A => 6
+        sBox.put("1011", "1100");    // B => C
+        sBox.put("1100", "0101");    // C => 5
+        sBox.put("1101", "1001");    // D => 9
+        sBox.put("1110", "0000");    // E => 0
+        sBox.put("1111", "0111");    // F => 7
+    }
+
+
 
 }
