@@ -30,6 +30,7 @@ public class SPN {
 
     public SPN() {
         initializeSBox();
+        encipher("");
     }
 
     public void readChiffre(String file) {
@@ -42,12 +43,21 @@ public class SPN {
         }
     }
 
+    /*
+     * @param plainText the plain text to encipher
+     */
+    public void encipher(String plainText) {
+
+    }
+
     public void decipher() {
     }
 
     /*
-    * @param input 16-bit input to lookup in the SBox
-    * @return the 16-bit value given by the SBox
+     * Execute the S-Box. Send a String to the S-Box and transform it.
+     *
+     * @param input 16-bit input to lookup in the SBox
+     * @return the 16-bit value given by the SBox
      */
     public String executeSBox(String input) {
         String output = "";
@@ -60,6 +70,8 @@ public class SPN {
     }
 
     /*
+     * Execute the inverse S-Box. Send a String to the inverse S-Box and transform it.
+     *
      * @param input 16-bit input to lookup in the inverse SBox
      * @return the 16-bit value given by the inverse SBox
      */
@@ -74,6 +86,8 @@ public class SPN {
     }
 
     /*
+     * Execute the bit permutation. Scramble an input String according to the permutation definition.
+     *
      * @param input 16-bit input to permute
      * @return the value given by the permutation
      */

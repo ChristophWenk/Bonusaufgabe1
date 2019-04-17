@@ -27,4 +27,5 @@ public class SPNTest {
         assertEquals("1001100101010101",spn.executeBitpermutation("1100001100001111"));
     }
 
+
 }
