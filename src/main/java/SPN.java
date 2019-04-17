@@ -19,10 +19,9 @@ public class SPN {
     byte[] chiffre;
 
     //K(k,i) bestehe aus 16 aufeinanderfolgenden Bits von k beginned bei Position 4i
-    long k0 = 0b0011_1010_1001_0100;
-    long k1 = 0b1010_1001_0100_1101;
-    long k2 = 0b1001_0100_1101_0110;
-    long k3 = 0b0100_1101_0110_0011;
+    String[] roundKeys = new String[r];
+
+    Tools tools = new Tools();
 
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
 
@@ -30,7 +29,7 @@ public class SPN {
 
     public SPN() {
         initializeSBox();
-        encipher("");
+        initializeKeys();
     }
 
     public void readChiffre(String file) {
@@ -46,8 +45,20 @@ public class SPN {
     /*
      * @param plainText the plain text to encipher
      */
-    public void encipher(String plainText) {
+    public String encipher(String plainText) {
+        // Initial Whitestep
+        String sBoxInput = tools.xorStrings(plainText,roundKeys[0]);
+        String sBoxOutput = "";
+        String bitPermutOutput = "";
 
+        for (int i = 1; i < r; i++) {
+            sBoxOutput = executeSBox(sBoxInput);
+            if (i < r-1) {
+                bitPermutOutput = executeBitpermutation(sBoxOutput);
+            }
+            sBoxInput = tools.xorStrings(bitPermutOutput, roundKeys[i]);
+        }
+        return sBoxInput;
     }
 
     public void decipher() {
@@ -121,5 +132,12 @@ public class SPN {
         sBox.put("1101", "1001");    // D => 9
         sBox.put("1110", "0000");    // E => 0
         sBox.put("1111", "0111");    // F => 7
+    }
+
+    public void initializeKeys() {
+        roundKeys[0] = "0011101010010100";
+        roundKeys[1] = "1010100101001101";
+        roundKeys[2] = "1001010011010110";
+        roundKeys[3] = "0100110101100011";
     }
 }

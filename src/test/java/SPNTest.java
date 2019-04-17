@@ -27,5 +27,9 @@ public class SPNTest {
         assertEquals("1001100101010101",spn.executeBitpermutation("1100001100001111"));
     }
 
+    @Test
+    public void encipher() {
+        assertEquals("1001100101010101",spn.encipher("1100001100001111"));
 
+    }
 }
