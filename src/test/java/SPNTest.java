@@ -14,12 +14,12 @@ public class SPNTest {
 
     @Test
     public void testExecuteSBox() {
-        assertEquals("1010",spn.executeSBox("1001"));
+        assertEquals("0101000111100111",spn.executeSBox("1100001100001111"));
     }
 
     @Test
     public void testinverseSBox() {
-        assertEquals("1101",spn.executeInverseSBox("1001"));
+        assertEquals("1100001100001111",spn.executeInverseSBox("0101000111100111"));
     }
 
     @Test

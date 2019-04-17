@@ -46,19 +46,31 @@ public class SPN {
     }
 
     /*
-    * @param input 4-bit input to lookup in the SBox
-    * @return the 4-bit value given by the SBox
+    * @param input 16-bit input to lookup in the SBox
+    * @return the 16-bit value given by the SBox
      */
     public String executeSBox(String input) {
-        return sBox.get(input).toString();
+        String output = "";
+
+       for (int i = 0; i < 4; i++ ) {
+           String sBoxInput = input.substring(i*4, i*4 + 4);
+           output += sBox.get(sBoxInput).toString();
+       }
+        return output;
     }
 
     /*
-     * @param input 4-bit input to lookup in the inverse SBox
-     * @return the 4-bit value given by the inverse SBox
+     * @param input 16-bit input to lookup in the inverse SBox
+     * @return the 16-bit value given by the inverse SBox
      */
     public String executeInverseSBox(String input) {
-        return sBox.getKey(input).toString();
+        String output = "";
+
+        for (int i = 0; i < 4; i++ ) {
+            String sBoxInput = input.substring(i*4, i*4 + 4);
+            output += sBox.getKey(sBoxInput).toString();
+        }
+        return output;
     }
 
     /*
@@ -82,8 +94,8 @@ public class SPN {
         sBox.put("0000", "1110");    // 0 => E
         sBox.put("0001", "0100");    // 1 => 4
         sBox.put("0010", "1101");    // 2 => D
-        sBox.put("0011", "0000");    // 3 => 1
-        sBox.put("0100", "0100");    // 4 => 2
+        sBox.put("0011", "0001");    // 3 => 1
+        sBox.put("0100", "0010");    // 4 => 2
         sBox.put("0101", "1111");    // 5 => F
         sBox.put("0110", "1011");    // 6 => B
         sBox.put("0111", "1000");    // 7 => 8
