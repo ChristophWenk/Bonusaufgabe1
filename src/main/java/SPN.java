@@ -52,8 +52,8 @@ public class SPN {
     public String executeSBox(String input) {
         String output = "";
 
-       for (int i = 0; i < 4; i++ ) {
-           String sBoxInput = input.substring(i*4, i*4 + 4);
+       for (int i = 0; i < m; i++ ) {
+           String sBoxInput = input.substring(i*m, i*m + m);
            output += sBox.get(sBoxInput).toString();
        }
         return output;
@@ -66,8 +66,8 @@ public class SPN {
     public String executeInverseSBox(String input) {
         String output = "";
 
-        for (int i = 0; i < 4; i++ ) {
-            String sBoxInput = input.substring(i*4, i*4 + 4);
+        for (int i = 0; i < m; i++ ) {
+            String sBoxInput = input.substring(i*m, i*m + m);
             output += sBox.getKey(sBoxInput).toString();
         }
         return output;
