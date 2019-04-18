@@ -9,7 +9,7 @@ public class SPNTest {
 
     @Before
     public void initializeTest() {
-        spn = new SPN();
+        spn = new SPN(4,4,4,32);
     }
 
     @Test
@@ -27,5 +27,13 @@ public class SPNTest {
         assertEquals("1001100101010101",spn.executeBitpermutation("1100001100001111"));
     }
 
+    @Test
+    public void encipher() {
+        assertEquals("1001100101010101",spn.encipher("1100001100001111"));
+    }
 
+    @Test
+    public void decipher() {
+        assertEquals("1001100101010101",spn.encipher("1100001100001111"));
+    }
 }

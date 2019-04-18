@@ -1,65 +1,97 @@
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 
 /*
  * This class offers all methods which are needed to perform an encryption with a substitution-permutation-network (SPN)
  */
 public class SPN {
 
-    int r = 4;
-    int n = 4;
-    int m = 4;
-    int s = 32;
-    long k = 0b00111010100101001101011000111111;
-    long chiffretext;
-    byte[] chiffre;
+    private int r;
+    private int n;
+    private int m;
+    private int s;
 
-    //K(k,i) bestehe aus 16 aufeinanderfolgenden Bits von k beginned bei Position 4i
-    long k0 = 0b0011_1010_1001_0100;
-    long k1 = 0b1010_1001_0100_1101;
-    long k2 = 0b1001_0100_1101_0110;
-    long k3 = 0b0100_1101_0110_0011;
+    //K(k,i) consisting of n concurrent bits of k starting at position 4i
+    String[] roundKeys;
+
+    Tools tools = new Tools();
 
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
 
     private BidiMap sBox = new DualHashBidiMap();
 
-    public SPN() {
+    public SPN(int r, int n, int m, int s) {
+        this.r = r;
+        this.n = n;
+        this.m = m;
+        this.s = s;
+        roundKeys = new String[r];
+        initializeKeys();
         initializeSBox();
-        encipher("");
-    }
-
-    public void readChiffre(String file) {
-        try {
-            chiffre = Files.readAllBytes(Paths.get(file));
-            int i = 2;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /*
-     * @param plainText the plain text to encipher
+     * Encipher a given plain text and return the chiffre text
+     *
+     * @param plainText the 16-bit plain text to encipher
+     * @return the enciphered chiffre text
      */
-    public void encipher(String plainText) {
+    public String encipher(String plainText) {
+        if (plainText.length() > n*m) {
+            throw new InvalidParameterException("Plaintext-length " + plainText.length() + " is greater than n * m = " + n*m);
+        }
+        // Initial Whitestep
+        String sBoxInput = tools.xorStrings(plainText,roundKeys[0]);
+        String sBoxOutput = "";
+        String bitPermutOutput = "";
 
+        for (int i = 1; i < r; i++) {
+            sBoxOutput = executeSBox(sBoxInput);
+            // Do not execute bit permutation in the last round
+            if (i < r-1) {
+                bitPermutOutput = executeBitpermutation(sBoxOutput);
+            }
+            sBoxInput = tools.xorStrings(bitPermutOutput, roundKeys[i]);
+        }
+        return sBoxInput;
     }
 
-    public void decipher() {
+    public String decipher(String plainText) {
+        if (plainText.length() > n*m) {
+            throw new InvalidParameterException("Plaintext-length " + plainText.length() + " is greater than n * m = " + n*m);
+        }
+        // Initial Whitestep
+        String sBoxInput = tools.xorStrings(plainText,roundKeys[0]);
+        String sBoxOutput = "";
+        String bitPermutOutput = "";
+
+        for (int i = 1; i < r; i++) {
+            sBoxOutput = executeInverseSBox(sBoxInput);
+            // Do not execute bit permutation in the last round
+            if (i < r-1) {
+                bitPermutOutput = executeBitpermutation(sBoxOutput);
+            }
+            // Execute bit permutation on round-key for all rounds except round 0 and r max
+            if (i != r) {
+                roundKeys[i] = executeBitpermutation(roundKeys[i]);
+            }
+            sBoxInput = tools.xorStrings(bitPermutOutput, roundKeys[i]);
+        }
+        return sBoxInput;
     }
 
     /*
      * Execute the S-Box. Send a String to the S-Box and transform it.
      *
-     * @param input 16-bit input to lookup in the SBox
-     * @return the 16-bit value given by the SBox
+     * @param input input to lookup in the SBox
+     * @return the value given by the SBox
      */
     public String executeSBox(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         String output = "";
 
        for (int i = 0; i < m; i++ ) {
@@ -72,10 +104,13 @@ public class SPN {
     /*
      * Execute the inverse S-Box. Send a String to the inverse S-Box and transform it.
      *
-     * @param input 16-bit input to lookup in the inverse SBox
-     * @return the 16-bit value given by the inverse SBox
+     * @param input input to lookup in the inverse SBox
+     * @return the value given by the inverse SBox
      */
     public String executeInverseSBox(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         String output = "";
 
         for (int i = 0; i < m; i++ ) {
@@ -88,10 +123,13 @@ public class SPN {
     /*
      * Execute the bit permutation. Scramble an input String according to the permutation definition.
      *
-     * @param input 16-bit input to permute
+     * @param input input to permute
      * @return the value given by the permutation
      */
     public String executeBitpermutation(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         char[] charList = new char[input.length()];
         for (int i = 0; i < input.length(); i++) {
             int newBitPosition = bitPermutation[i];
@@ -121,5 +159,12 @@ public class SPN {
         sBox.put("1101", "1001");    // D => 9
         sBox.put("1110", "0000");    // E => 0
         sBox.put("1111", "0111");    // F => 7
+    }
+
+    public void initializeKeys() {
+        roundKeys[0] = "0011101010010100";
+        roundKeys[1] = "1010100101001101";
+        roundKeys[2] = "1001010011010110";
+        roundKeys[3] = "0100110101100011";
     }
 }
