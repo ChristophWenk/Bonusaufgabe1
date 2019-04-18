@@ -1,9 +1,25 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /*
  * This class offers methods commonly used by ciphers
  */
 public class Tools {
 
+    byte[] chiffre;
+
     public Tools() {
+    }
+
+    public void readChiffre(String file) {
+        try {
+            chiffre = Files.readAllBytes(Paths.get(file));
+            int i = 2;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*

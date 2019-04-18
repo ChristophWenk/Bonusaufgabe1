@@ -1,25 +1,20 @@
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 
 /*
  * This class offers all methods which are needed to perform an encryption with a substitution-permutation-network (SPN)
  */
 public class SPN {
 
-    int r = 4;
-    int n = 4;
-    int m = 4;
-    int s = 32;
-    long k = 0b00111010100101001101011000111111;
-    long chiffretext;
-    byte[] chiffre;
+    private int r;
+    private int n;
+    private int m;
+    private int s;
 
-    //K(k,i) bestehe aus 16 aufeinanderfolgenden Bits von k beginned bei Position 4i
-    String[] roundKeys = new String[r];
+    //K(k,i) consisting of n concurrent bits of k starting at position 4i
+    String[] roundKeys;
 
     Tools tools = new Tools();
 
@@ -27,25 +22,26 @@ public class SPN {
 
     private BidiMap sBox = new DualHashBidiMap();
 
-    public SPN() {
-        initializeSBox();
+    public SPN(int r, int n, int m, int s) {
+        this.r = r;
+        this.n = n;
+        this.m = m;
+        this.s = s;
+        roundKeys = new String[r];
         initializeKeys();
-    }
-
-    public void readChiffre(String file) {
-        try {
-            chiffre = Files.readAllBytes(Paths.get(file));
-            int i = 2;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initializeSBox();
     }
 
     /*
-     * @param plainText the plain text to encipher
+     * Encipher a given plain text and return the chiffre text
+     *
+     * @param plainText the 16-bit plain text to encipher
+     * @return the enciphered chiffre text
      */
     public String encipher(String plainText) {
+        if (plainText.length() > n*m) {
+            throw new InvalidParameterException("Plaintext-length " + plainText.length() + " is greater than n * m = " + n*m);
+        }
         // Initial Whitestep
         String sBoxInput = tools.xorStrings(plainText,roundKeys[0]);
         String sBoxOutput = "";
@@ -53,6 +49,7 @@ public class SPN {
 
         for (int i = 1; i < r; i++) {
             sBoxOutput = executeSBox(sBoxInput);
+            // Do not execute bit permutation in the last round
             if (i < r-1) {
                 bitPermutOutput = executeBitpermutation(sBoxOutput);
             }
@@ -61,16 +58,40 @@ public class SPN {
         return sBoxInput;
     }
 
-    public void decipher() {
+    public String decipher(String plainText) {
+        if (plainText.length() > n*m) {
+            throw new InvalidParameterException("Plaintext-length " + plainText.length() + " is greater than n * m = " + n*m);
+        }
+        // Initial Whitestep
+        String sBoxInput = tools.xorStrings(plainText,roundKeys[0]);
+        String sBoxOutput = "";
+        String bitPermutOutput = "";
+
+        for (int i = 1; i < r; i++) {
+            sBoxOutput = executeInverseSBox(sBoxInput);
+            // Do not execute bit permutation in the last round
+            if (i < r-1) {
+                bitPermutOutput = executeBitpermutation(sBoxOutput);
+            }
+            // Execute bit permutation on round-key for all rounds except round 0 and r max
+            if (i != r) {
+                roundKeys[i] = executeBitpermutation(roundKeys[i]);
+            }
+            sBoxInput = tools.xorStrings(bitPermutOutput, roundKeys[i]);
+        }
+        return sBoxInput;
     }
 
     /*
      * Execute the S-Box. Send a String to the S-Box and transform it.
      *
-     * @param input 16-bit input to lookup in the SBox
-     * @return the 16-bit value given by the SBox
+     * @param input input to lookup in the SBox
+     * @return the value given by the SBox
      */
     public String executeSBox(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         String output = "";
 
        for (int i = 0; i < m; i++ ) {
@@ -83,10 +104,13 @@ public class SPN {
     /*
      * Execute the inverse S-Box. Send a String to the inverse S-Box and transform it.
      *
-     * @param input 16-bit input to lookup in the inverse SBox
-     * @return the 16-bit value given by the inverse SBox
+     * @param input input to lookup in the inverse SBox
+     * @return the value given by the inverse SBox
      */
     public String executeInverseSBox(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         String output = "";
 
         for (int i = 0; i < m; i++ ) {
@@ -99,10 +123,13 @@ public class SPN {
     /*
      * Execute the bit permutation. Scramble an input String according to the permutation definition.
      *
-     * @param input 16-bit input to permute
+     * @param input input to permute
      * @return the value given by the permutation
      */
     public String executeBitpermutation(String input) {
+        if (input.length() > n*m) {
+            throw new InvalidParameterException("Input-length " + input.length() + " is greater than n * m = " + n*m);
+        }
         char[] charList = new char[input.length()];
         for (int i = 0; i < input.length(); i++) {
             int newBitPosition = bitPermutation[i];
