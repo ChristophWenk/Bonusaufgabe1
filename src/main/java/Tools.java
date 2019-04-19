@@ -31,7 +31,7 @@ public class Tools {
     }
 
     /*
-     * Xor 2 strings together.
+     * Xor 2 strings with each other.
      *
      * @param input1 the first input string to be xor'd with input2
      * @param input2 the second input string to be xor'd with input1
@@ -54,7 +54,6 @@ public class Tools {
                 missingZeroes += "0";
             }
         }
-
         output = missingZeroes + output;
         return output;
     }

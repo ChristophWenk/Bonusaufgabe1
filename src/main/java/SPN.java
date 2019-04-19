@@ -106,6 +106,7 @@ public class SPN {
         }
         String output = "";
 
+        // Send chunks with the length of n to the S-Box
        for (int i = 0; i < m; i++ ) {
            String sBoxInput = input.substring(i*n, i*n + n);
            output += sBox.get(sBoxInput).toString();
@@ -126,6 +127,7 @@ public class SPN {
         }
         String output = "";
 
+        // Send chunks with the length of n to the inverse S-Box
         for (int i = 0; i < m; i++ ) {
             String sBoxInput = input.substring(i*n, i*n + n);
             output += sBox.getKey(sBoxInput).toString();
@@ -186,7 +188,7 @@ public class SPN {
     public void initializeDecipherKeys() {
         for (int i = 0; i <= r; i++) {
             if (i == 0 || i == r) {
-                decipherRoundKeys[r-i] = encipherRoundKeys[0+i];
+                decipherRoundKeys[r-i] = encipherRoundKeys[i];
             }
             else {
                 decipherRoundKeys[r-i] = executeBitpermutation(encipherRoundKeys[i]);
