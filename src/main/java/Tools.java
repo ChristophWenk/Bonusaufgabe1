@@ -31,7 +31,32 @@ public class Tools {
     }
 
     /*
-     * Xor 2 strings together.
+     * Normalize a Text so that it can be processed. Add one 1 and so many 0 so that the input is
+     * dividable without rest by the normValue.
+     *
+     * @param input The string that should be normalized
+     * @param normValue The Value to base the normalization on
+     * @return The normalized String
+     */
+    public String normalizeText(String input, int normValue) {
+        String output = input;
+
+        int x = input.length();
+
+        if (input.length() % normValue != 0) {
+           int difference = input.length() % normValue;
+           String normalization = "1";
+           for (int i = 0; i < difference - 1; i++) {
+               normalization += "0";
+           }
+           output = output + normalization;
+        }
+
+        return output;
+    }
+
+    /*
+     * Xor 2 strings with each other.
      *
      * @param input1 the first input string to be xor'd with input2
      * @param input2 the second input string to be xor'd with input1
@@ -54,7 +79,6 @@ public class Tools {
                 missingZeroes += "0";
             }
         }
-
         output = missingZeroes + output;
         return output;
     }
