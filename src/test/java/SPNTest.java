@@ -34,7 +34,7 @@ public class SPNTest {
 
     @Test
     public void decipher() {
-        assertEquals("1001100101010101",spn.decipher("1100001100001111"));
+        assertEquals("1100001100001111",spn.decipher("0110110000000100"));
     }
 
     @Test

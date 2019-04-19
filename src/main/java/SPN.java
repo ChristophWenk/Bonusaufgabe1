@@ -26,8 +26,8 @@ public class SPN {
         this.n = n;
         this.m = m;
         this.s = s;
-        encipherRoundKeys = new String[r];
-        decipherRoundKeys = new String[r];
+        encipherRoundKeys = new String[r+1];
+        decipherRoundKeys = new String[r+1];
         initializeKeys();
         initializeSBox();
     }
@@ -41,17 +41,17 @@ public class SPN {
     public String encipher(String plainText) {
         if (plainText.length() > n*m) {
             throw new InvalidParameterException("Plaintext-length " + plainText.length() +
-                    " is greater than n * m = " + n*m);
+                    " is not equal to n * m = " + n*m);
         }
         // Initial Whitestep
         String sBoxInput = tools.xorStrings(plainText, encipherRoundKeys[0]);
         String sBoxOutput = "";
         String bitPermutOutput = "";
 
-        for (int i = 1; i < r; i++) {
+        for (int i = 1; i <= r; i++) {
             sBoxOutput = executeSBox(sBoxInput);
             // Do not execute bit permutation in the last round
-            if (i < r-1) {
+            if (i < r) {
                 bitPermutOutput = executeBitpermutation(sBoxOutput);
                 sBoxInput = tools.xorStrings(bitPermutOutput, encipherRoundKeys[i]);
             }
@@ -71,7 +71,7 @@ public class SPN {
     public String decipher(String chiffreText) {
         if (chiffreText.length() > n*m) {
             throw new InvalidParameterException("Plaintext-length " + chiffreText.length() +
-                    " is greater than n * m = " + n*m);
+                    " is not equal to n * m = " + n*m);
         }
         initializeDecipherKeys();
 
@@ -80,10 +80,10 @@ public class SPN {
         String sBoxOutput = "";
         String bitPermutOutput = "";
 
-        for (int i = 1; i < r; i++) {
+        for (int i = 1; i <= r; i++) {
             sBoxOutput = executeInverseSBox(sBoxInput);
             // Do not execute bit permutation in the last round
-            if (i < r - 1) {
+            if (i < r) {
                 bitPermutOutput = executeBitpermutation(sBoxOutput);
                 sBoxInput = tools.xorStrings(bitPermutOutput, decipherRoundKeys[i]);
             } else {
@@ -102,7 +102,7 @@ public class SPN {
     public String executeSBox(String input) {
         if (input.length() > n*m) {
             throw new InvalidParameterException("Input-length " + input.length() +
-                    " is greater than n * m = " + n*m);
+                    " is not equal to n * m = " + n*m);
         }
         String output = "";
 
@@ -122,7 +122,7 @@ public class SPN {
     public String executeInverseSBox(String input) {
         if (input.length() > n*m) {
             throw new InvalidParameterException("Input-length " + input.length() +
-                    " is greater than n * m = " + n*m);
+                    " is not equal to n * m = " + n*m);
         }
         String output = "";
 
@@ -142,7 +142,7 @@ public class SPN {
     public String executeBitpermutation(String input) {
         if (input.length() > n*m) {
             throw new InvalidParameterException("Input-length " + input.length() +
-                    " is greater than n * m = " + n*m);
+                    " is not equal to n * m = " + n*m);
         }
         char[] charList = new char[input.length()];
         for (int i = 0; i < input.length(); i++) {
@@ -180,15 +180,16 @@ public class SPN {
         encipherRoundKeys[1] = "1010100101001101";
         encipherRoundKeys[2] = "1001010011010110";
         encipherRoundKeys[3] = "0100110101100011";
+        encipherRoundKeys[4] = "1101011000111111";
     }
 
     public void initializeDecipherKeys() {
-        for (int i = 0; i < r; i++) {
+        for (int i = 0; i <= r; i++) {
             if (i == 0) {
-                decipherRoundKeys[r-1] = encipherRoundKeys[0];
+                decipherRoundKeys[r] = encipherRoundKeys[0];
             }
-            if (i == r-1) {
-                decipherRoundKeys[0] = encipherRoundKeys[r-1];
+            if (i == r) {
+                decipherRoundKeys[0] = encipherRoundKeys[r];
             }
             else {
                 decipherRoundKeys[i] = executeBitpermutation(encipherRoundKeys[i]);
