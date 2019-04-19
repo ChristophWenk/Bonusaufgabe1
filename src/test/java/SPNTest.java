@@ -29,12 +29,12 @@ public class SPNTest {
 
     @Test
     public void encipher() {
-        assertEquals("0110110000000100",spn.encipher("1100001100001111"));
+        assertEquals("1111011010100100",spn.encipher("1100001100001111"));
     }
 
     @Test
     public void decipher() {
-        assertEquals("1100001100001111",spn.decipher("0110110000000100"));
+        assertEquals("1100001100001111",spn.decipher("1111011010100100"));
     }
 
     @Test

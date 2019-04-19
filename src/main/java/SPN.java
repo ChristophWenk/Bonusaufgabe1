@@ -35,7 +35,7 @@ public class SPN {
     /*
      * Encipher a given plain text and return the chiffre text
      *
-     * @param plainText the 16-bit plain text to encipher
+     * @param plainText the plain text to encipher
      * @return the enciphered chiffre text
      */
     public String encipher(String plainText) {
@@ -65,7 +65,7 @@ public class SPN {
     /*
      * Decipher a given chiffre text and return the plain text
      *
-     * @param chiffreText the 16-bit chiffre text to decipher
+     * @param chiffreText the chiffre text to decipher
      * @return the deciphered plain text
      */
     public String decipher(String chiffreText) {
@@ -107,7 +107,7 @@ public class SPN {
         String output = "";
 
        for (int i = 0; i < m; i++ ) {
-           String sBoxInput = input.substring(i*m, i*m + m);
+           String sBoxInput = input.substring(i*n, i*n + n);
            output += sBox.get(sBoxInput).toString();
        }
         return output;
@@ -127,7 +127,7 @@ public class SPN {
         String output = "";
 
         for (int i = 0; i < m; i++ ) {
-            String sBoxInput = input.substring(i*m, i*m + m);
+            String sBoxInput = input.substring(i*n, i*n + n);
             output += sBox.getKey(sBoxInput).toString();
         }
         return output;
@@ -185,14 +185,11 @@ public class SPN {
 
     public void initializeDecipherKeys() {
         for (int i = 0; i <= r; i++) {
-            if (i == 0) {
-                decipherRoundKeys[r] = encipherRoundKeys[0];
-            }
-            if (i == r) {
-                decipherRoundKeys[0] = encipherRoundKeys[r];
+            if (i == 0 || i == r) {
+                decipherRoundKeys[r-i] = encipherRoundKeys[0+i];
             }
             else {
-                decipherRoundKeys[i] = executeBitpermutation(encipherRoundKeys[i]);
+                decipherRoundKeys[r-i] = executeBitpermutation(encipherRoundKeys[i]);
             }
         }
     }
