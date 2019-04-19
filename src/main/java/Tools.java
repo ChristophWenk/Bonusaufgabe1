@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -7,18 +8,25 @@ import java.nio.file.Paths;
  */
 public class Tools {
 
-    byte[] chiffre;
+    private String fileContent = "";
 
     public Tools() {
     }
 
-    public void readChiffre(String file) {
+    /*
+     * Read an input file
+     *
+     * @param file the file path
+     * @return the file content
+     */
+    public String readChiffreText(String file) {
         try {
-            chiffre = Files.readAllBytes(Paths.get(file));
-            int i = 2;
-
+            Files.lines(Paths.get(file), StandardCharsets.UTF_8).forEach(s -> fileContent += s);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        finally {
+            return fileContent;
         }
     }
 
