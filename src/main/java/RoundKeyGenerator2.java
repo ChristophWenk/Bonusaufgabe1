@@ -1,7 +1,7 @@
 /*
  * This class generates all round keys needed by an SPN
  */
-public class RoundkeyGenerator {
+public class RoundKeyGenerator2 {
 
     private int r;
     private int n;
@@ -12,7 +12,7 @@ public class RoundkeyGenerator {
     /*
      * Construct the RoundKeyGenerator
      */
-    public RoundkeyGenerator(int r, int n, int m, int s, String totalKey) {
+    public RoundKeyGenerator2(int r, int n, int m, int s, String totalKey) {
         this.r = r;
         this.n = n;
         this.m = m;
