@@ -18,7 +18,7 @@ public class SPNTest {
     }
 
     @Test
-    public void testinverseSBox() {
+    public void testExecuteInverseSBox() {
         assertEquals("1100001100001111",spn.executeInverseSBox("0101000111100111"));
     }
 

@@ -15,7 +15,7 @@ public class SPN  {
     private int m;
     private int s;
     private String totalKey;
-    RoundkeyGenerator roundkey;
+    private RoundkeyGenerator roundkeyGenerator;
 
     //K(k,i) consisting of n concurrent bits of k starting at position 4i
     private String[] encipherRoundKeys;
@@ -23,14 +23,21 @@ public class SPN  {
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
     private BidiMap sBox = new DualHashBidiMap();
 
-
+    /*
+     * Construct the SPN
+     */
     public SPN(int r, int n, int m, int s, String totalKey) {
+        // Validate input
+        if (totalKey.length() != s) {
+            throw new InvalidParameterException("TotalKey length of " + totalKey.length() +
+                    " not equal to Parameter s length of " + s);
+        }
         this.r = r;
         this.n = n;
         this.m = m;
         this.s = s;
         this.totalKey = totalKey;
-        roundkey = new RoundkeyGenerator(r,n,m,s,totalKey);
+        roundkeyGenerator = new RoundkeyGenerator(r,n,m,s,totalKey);
         encipherRoundKeys = new String[r+1];
         decipherRoundKeys = new String[r+1];
         initializeKeys();
@@ -182,13 +189,17 @@ public class SPN  {
         sBox.put("1111", "0111");    // F <=> 7
     }
 
+    /*
+     * Initialize cipher round keys
+     */
     public void initializeKeys() {
-        //get roundkeys from class "RoundkeyGenerator"
-        for(int i=0; i<=r; i++){
-            encipherRoundKeys[i]= String.valueOf(roundkey.getRoundKey());
-        }
+        // Get round keys from class "RoundkeyGenerator"
+        encipherRoundKeys = roundkeyGenerator.getRoundKey();
     }
 
+    /*
+     * Initialize decipher round keys
+     */
     public void initializeDecipherKeys() {
         for (int i = 0; i <= r; i++) {
             if (i == 0 || i == r) {
