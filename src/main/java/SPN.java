@@ -15,7 +15,7 @@ public class SPN  {
     private int m;
     private int s;
     private String totalKey;
-    private RoundKeyGenerator2 roundkeyGenerator;
+    private RoundkeyGenerator roundkeyGenerator;
 
     //K(k,i) consisting of n concurrent bits of k starting at position 4i
     private String[] encipherRoundKeys;
@@ -37,7 +37,7 @@ public class SPN  {
         this.m = m;
         this.s = s;
         this.totalKey = totalKey;
-        roundkeyGenerator = new RoundKeyGenerator2(r,n,m,s,totalKey);
+        roundkeyGenerator = new RoundkeyGenerator(r,n,m,s,totalKey);
         encipherRoundKeys = new String[r+1];
         decipherRoundKeys = new String[r+1];
         initializeKeys();
@@ -193,7 +193,7 @@ public class SPN  {
      * Initialize cipher round keys
      */
     public void initializeKeys() {
-        // Get round keys from class "RoundKeyGenerator2"
+        // Get round keys from class "RoundkeyGenerator"
         encipherRoundKeys = roundkeyGenerator.getRoundKey();
     }
 
