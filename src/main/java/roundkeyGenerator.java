@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class roundkeyGenerator {
 
@@ -13,30 +14,27 @@ public class roundkeyGenerator {
         String totalKey = "00111010100101001101011000111111";
         int totalKeyLength = totalKey.length();
         char[] totalKeyArray = new char[totalKeyLength];
+        char[] roundkeyBitArray = new char[bitLength];
+        String[] roundkeyArray = new String[m];
 
-        ArrayList<Character> roundkeys = new ArrayList<Character>();
-        char[] roundkeyArray = new char[bitLength];
-
-            for (int i = 0; i < totalKeyArray.length; i++) {
+        for (int i = 0; i < totalKeyArray.length; i++) {
                 totalKeyArray[i] = totalKey.charAt(i);
             }
 
-            int i= 0;
-            // Runden zaehlen
-            while(i<r){
-                // Rundenschluessel abfuellen
+            int q= 0;
+            // Count rounds
+            while(q<r){
+                // generate m*n char-Array with each bit
                 for (int j=0; j<bitLength; j++){ ;
-                    // Einzelner Schlüssel erstellen
-                        roundkeyArray[j] = totalKeyArray[(i*r)+j];
-                        System.out.print(roundkeyArray[j]);
+                        roundkeyBitArray[j] = totalKeyArray[(q*r)+j];
                     }
-                i++;
+                    // Take each bit and merge it to one String and put it into roundkeyArray
+                String roundkeyPicker = new String(roundkeyBitArray);
+                roundkeyArray[q]= roundkeyPicker;
+
+                q++;
                 }
-
-            String key = String.copyValueOf(roundkeyArray);
-            String[] roundkeys2 = key.split("(?<=\\G\\d{16})");
-            System.out.println(roundkeys2[0]);
-
+       System.out.println(Arrays.toString(roundkeyArray));
 
 
     }
