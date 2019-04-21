@@ -2,6 +2,7 @@ public class CTR {
 
     public CTR() {
 
+
     }
 
     public String encipher() {
