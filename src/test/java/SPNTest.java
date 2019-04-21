@@ -9,7 +9,7 @@ public class SPNTest {
 
     @Before
     public void initializeTest() {
-        spn = new SPN(4,4,4,32);
+        spn = new SPN(4,4,4,32, "00111010100101001101011000111111");
     }
 
     @Test

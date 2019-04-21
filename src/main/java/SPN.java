@@ -6,7 +6,7 @@ import java.security.InvalidParameterException;
 /*
  * This class offers all methods which are needed to perform an encryption with a substitution-permutation-network (SPN)
  */
-public class SPN {
+public class SPN  {
 
     private Tools tools = new Tools();
 
@@ -14,6 +14,8 @@ public class SPN {
     private int n;
     private int m;
     private int s;
+    private String totalKey;
+    RoundkeyGenerator roundkey;
 
     //K(k,i) consisting of n concurrent bits of k starting at position 4i
     private String[] encipherRoundKeys;
@@ -21,11 +23,14 @@ public class SPN {
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
     private BidiMap sBox = new DualHashBidiMap();
 
-    public SPN(int r, int n, int m, int s) {
+
+    public SPN(int r, int n, int m, int s, String totalKey) {
         this.r = r;
         this.n = n;
         this.m = m;
         this.s = s;
+        this.totalKey = totalKey;
+        roundkey = new RoundkeyGenerator(r,n,m,s,totalKey);
         encipherRoundKeys = new String[r+1];
         decipherRoundKeys = new String[r+1];
         initializeKeys();
@@ -178,11 +183,10 @@ public class SPN {
     }
 
     public void initializeKeys() {
-        encipherRoundKeys[0] = "0011101010010100";
-        encipherRoundKeys[1] = "1010100101001101";
-        encipherRoundKeys[2] = "1001010011010110";
-        encipherRoundKeys[3] = "0100110101100011";
-        encipherRoundKeys[4] = "1101011000111111";
+        //get roundkeys from class "RoundkeyGenerator"
+        for(int i=0; i<=r; i++){
+            encipherRoundKeys[i]= String.valueOf(roundkey.getRoundKey());
+        }
     }
 
     public void initializeDecipherKeys() {
