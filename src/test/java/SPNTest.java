@@ -6,10 +6,19 @@ import static org.junit.Assert.assertEquals;
 public class SPNTest {
 
     private SPN spn;
+    private SPN spn2;
 
     @Before
     public void initializeTest() {
         spn = new SPN(4,4,4,32, "00111010100101001101011000111111");
+        // Example test provided by A. Vogt
+        spn2 = new SPN(4,4,4,32, "00010001001010001000110000000000");
+    }
+
+    @Test
+    public void testKrysi() {
+        // Example test provided by A. Vogt
+        assertEquals("1010111010110100",spn2.encipher("0001001010001111"));
     }
 
     @Test
