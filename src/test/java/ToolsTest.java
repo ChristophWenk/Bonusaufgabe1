@@ -23,6 +23,12 @@ public class ToolsTest {
             tools.readChiffreText("src/main/resources/chiffre.txt"));
     }
 
+    @Test
+    public void testYMinus1(){
+        tools.readChiffreText("src/main/resources/chiffre.txt");
+        assertEquals("0000010011010010",tools.yMinus1());
+    }
+
     @Test public void testNormalizeText() {
         assertEquals(  "000001001101001000001011101110000000001010001\n" +
                                 "111100011100111111101100000010100010100001110\n" +

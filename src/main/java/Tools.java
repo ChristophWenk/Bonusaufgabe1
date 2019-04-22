@@ -30,6 +30,14 @@ public class Tools {
         }
     }
 
+    public String yMinus1(){
+        return fileContent.substring(0,16);
+    }
+
+    public String getChiffreText(){
+        return fileContent;
+    }
+
     /*
      * Normalize a Text so that it can be processed. Add one 1 and so many 0 so that the input is
      * dividable without rest by the normValue.
