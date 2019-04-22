@@ -1,6 +1,6 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
+/*
+ * This class generates all round keys needed by an SPN
+ */
 public class RoundkeyGenerator {
 
     private int r;
@@ -9,6 +9,9 @@ public class RoundkeyGenerator {
     private int s;
     private String totalKey;
 
+    /*
+     * Construct the RoundKeyGenerator
+     */
     public RoundkeyGenerator(int r, int n, int m, int s, String totalKey) {
         this.r = r;
         this.n = n;
@@ -17,6 +20,11 @@ public class RoundkeyGenerator {
         this.totalKey = totalKey;
     }
 
+    /*
+     * Generate n round keys for the generators total key
+     *
+     * @return List with all the round keys
+     */
     public String[] getRoundKey() {
         // instance length of the roundkeys
         int bitLength = r * m;
