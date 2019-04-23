@@ -8,8 +8,9 @@ public class CTR {
     private int rounds;
     private int bitLength;
     private SPN spn;
-
     private Tools tools = new Tools();
+    private int amountOfChiffreChunks;
+
     public CTR(int r, int n, int m, int s, String totalKey, String chiffreText) {
         this.r = r;
         this.n = n;
@@ -19,63 +20,43 @@ public class CTR {
         this.chiffreText = new String(chiffreText);
         bitLength = m*n;
         rounds = chiffreText.length()/bitLength;
-        SPN spn = new SPN(r,n,m,s,totalKey);
+        spn = new SPN(r,n,m,s,totalKey);
     }
 
 
     public String[] getyArray() {
-        char[] chiffreTextCharArray = chiffreText.toCharArray();
-        char[] chiffreBitArray = new char[bitLength];
+        int chunkLength = n * m;
+        amountOfChiffreChunks = chiffreText.length() / chunkLength;
         String[] yArray = new String[rounds];
-        int q = 0;
-        // Count rounds +1 for amount of roundkeys
-        while (q < rounds) {
-            // generate m*n char-Array with each bit
-            for (int j = 0; j < bitLength; j++) {
-                chiffreBitArray[j] = chiffreTextCharArray[(q * r) + j];
-            }
-            // Take each bit and merge it to one String and put it into roundkeyArray
-            String chifffrePicker = new String(chiffreBitArray);
-            yArray[q] = chifffrePicker;
-            q++;
+
+        for (int i = 0; i < amountOfChiffreChunks; i++ ) {
+            yArray[i] = chiffreText.substring(i*chunkLength, i*chunkLength + chunkLength);
         }
+
         return yArray;
     }
 
 
     public String[] decipher() {
-        String result;
         String[] yArray = getyArray();
-        // get yMinusN
-        String[] storeYminus1 = yMinusN(yArray);
-        String[]x= new String[rounds-1];
-        for (int i=1; i>rounds-1; i++){
-            // run SPN
-            result = spn.decipher(storeYminus1[i]);
-            // xor
-            String xElement = tools.xorStrings(yArray[i],result);
-            // store result
-            x[i] = xElement;
-        }
-        return x;
-    }
-
-    public String[] yMinusN(String[] yArray){
         String yMinus1 = yArray[0];
-        //convert Integer
-        // TODO: java.lang.NumberFormatException: For input string: "0000010011010010"
+        String[] storeSPNChunks = new String[8];
 
-        int yMinusNInteger = Integer.valueOf(yMinus1);
-        int[] yMinusNIntArray= new int[rounds];
-
-        // count +1 for each round to y-1
-        String[] yMinus1StringArray = new String [rounds];
-        for(int i=0; i>rounds;i++) {
-            int yMinus1Increment =(yMinusNInteger+i)% (1<< bitLength);
-            yMinusNIntArray[i] = yMinus1Increment;
-            yMinus1StringArray[i]= String.valueOf(yMinus1Increment);
+        // Send all the chunks to the SPN
+        String yn = yMinus1;
+        for (int i = 0; i < (8-1); i++) {
+            if (i > 0) {
+                yn = tools.add1ToY(yn);
+            }
+            storeSPNChunks[i] = spn.encipher(yn);
         }
-        return yMinus1StringArray;
-    }
 
+        //Xor Chunks with y0...yn-1
+        String[] plainText = new String[8];
+        for (int i = 0; i < (8-1); i++) {
+            plainText[i] = tools.xorStrings(storeSPNChunks[i],yArray[i+1]);
+        }
+
+        return plainText;
+    }
 }

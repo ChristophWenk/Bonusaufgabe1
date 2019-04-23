@@ -30,6 +30,24 @@ public class Tools {
         }
     }
 
+    public String add1ToY(String y) {
+        int a = Integer.parseInt(y,2);
+        a = a + 1;
+        String newY = Integer.toBinaryString(a);
+
+        // Add missing zeroes to beginning of String
+        String missingZeroes = "";
+        if (newY.length() < y.length()) {
+            int difference = y.length() - newY.length();
+            for (int i = 0; i < difference; i++) {
+                missingZeroes += "0";
+            }
+        }
+        newY = missingZeroes + newY;
+
+        return newY;
+    }
+
     public String yMinus1(){
         return fileContent.substring(0,16);
     }
@@ -48,8 +66,6 @@ public class Tools {
      */
     public String normalizeText(String input, int normValue) {
         String output = input;
-
-        int x = input.length();
 
         if (input.length() % normValue != 0) {
            int difference = input.length() % normValue;
