@@ -3,17 +3,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/*
+/**
  * This class offers methods commonly used by ciphers
  */
 public class Tools {
 
     private String fileContent = "";
 
-    public Tools() {
-    }
-
-    /*
+    /**
      * Read an input file
      *
      * @param file the file path
@@ -30,6 +27,12 @@ public class Tools {
         }
     }
 
+    /**
+     * Increment y-n by 1
+     *
+     * @param y The y to increment
+     * @return The incremented y
+     */
     public String add1ToY(String y) {
         int a = Integer.parseInt(y,2);
         a = a + 1;
@@ -48,6 +51,12 @@ public class Tools {
         return newY;
     }
 
+    /**
+     * Convert a string in binary representation to human readable ASCII format
+     *
+     * @param binaryString The string e.g. "1001" to be converted to ASCII format
+     * @return The converted ASCII string e.g. "a"
+     */
     public String convertBinaryToASCII(String binaryString) {
         int binaryInt = Integer.parseInt(binaryString,2);
         String str = Character.toString((char)binaryInt);
@@ -55,7 +64,13 @@ public class Tools {
         return str;
     }
 
-    public static String convertArrayToStringMethod(String[] strArray) {
+    /**
+     * Convert a string array to a simple string
+     *
+     * @param strArray The String array to be converted
+     * @return The flat String to be retrieved
+     */
+    public static String convertArrayToString(String[] strArray) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < strArray.length; i++) {
             stringBuilder.append(strArray[i]);
@@ -63,15 +78,16 @@ public class Tools {
         return stringBuilder.toString();
     }
 
+    /**
+     * Get y-1 from an input file
+     *
+     * @return the retrieved y-1
+     */
     public String yMinus1(){
         return fileContent.substring(0,16);
     }
 
-    public String getChiffreText(){
-        return fileContent;
-    }
-
-    /*
+    /**
      * Normalize a Text so that it can be processed. Add one 1 and so many 0 so that the input is
      * dividable without rest by the normValue.
      *
@@ -94,7 +110,7 @@ public class Tools {
         return output;
     }
 
-    /*
+    /**
      * Xor 2 strings with each other.
      *
      * @param input1 the first input string to be xor'd with input2

@@ -1,4 +1,4 @@
-/*
+/**
  * This class generates all round keys needed by an SPN
  */
 public class RoundkeyGenerator {
@@ -9,8 +9,14 @@ public class RoundkeyGenerator {
     private int s;
     private String totalKey;
 
-    /*
+    /**
      * Construct the RoundKeyGenerator
+     *
+     * @param r The amount of rounds
+     * @param n The length of a plain text piece
+     * @param m The amount of plain text pieces
+     * @param s The length of the total key
+     * @param totalKey The encryption and decryption key
      */
     public RoundkeyGenerator(int r, int n, int m, int s, String totalKey) {
         this.r = r;
@@ -20,7 +26,7 @@ public class RoundkeyGenerator {
         this.totalKey = totalKey;
     }
 
-    /*
+    /**
      * Generate n round keys for the generators total key
      *
      * @return List with all the round keys

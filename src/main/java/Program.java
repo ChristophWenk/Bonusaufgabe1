@@ -8,7 +8,6 @@ public class Program {
         CTR ctr = new CTR(4,4,4,32,"00111010100101001101011000111111", chiffreText);
 
         String plainText = ctr.decipher();
-      //  String plainText = tools.convertArrayToStringMethod(klartext);
 
         String[] asciiPackages = new String[plainText.length()/8];
 

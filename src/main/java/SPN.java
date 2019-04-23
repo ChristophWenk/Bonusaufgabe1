@@ -3,7 +3,7 @@ import org.apache.commons.collections.bidimap.DualHashBidiMap;
 
 import java.security.InvalidParameterException;
 
-/*
+/**
  * This class offers all methods which are needed to perform an encryption with a substitution-permutation-network (SPN)
  */
 public class SPN  {
@@ -27,8 +27,14 @@ public class SPN  {
     private int[] bitPermutation = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
     private BidiMap sBox = new DualHashBidiMap();
 
-    /*
+    /**
      * Construct the SPN
+     *
+     * @param r The amount of rounds
+     * @param n The length of a plain text piece
+     * @param m The amount of plain text pieces
+     * @param s The length of the total key
+     * @param totalKey The encryption and decryption key
      */
     public SPN(int r, int n, int m, int s, String totalKey) {
         // Validate input
@@ -48,7 +54,7 @@ public class SPN  {
         initializeSBox();
     }
 
-    /*
+    /**
      * Encipher a given plain text and return the chiffre text
      *
      * @param plainText the plain text to encipher
@@ -78,7 +84,7 @@ public class SPN  {
         return sBoxInput;
     }
 
-    /*
+    /**
      * Decipher a given chiffre text and return the plain text
      *
      * @param chiffreText the chiffre text to decipher
@@ -109,7 +115,7 @@ public class SPN  {
         return sBoxInput;
     }
 
-    /*
+    /**
      * Execute the S-Box. Send a String to the S-Box and transform it.
      *
      * @param input input to lookup in the SBox
@@ -130,7 +136,7 @@ public class SPN  {
         return output;
     }
 
-    /*
+    /**
      * Execute the inverse S-Box. Send a String to the inverse S-Box and transform it.
      *
      * @param input input to lookup in the inverse SBox
@@ -151,7 +157,7 @@ public class SPN  {
         return output;
     }
 
-    /*
+    /**
      * Execute the bit permutation. Scramble an input String according to the permutation definition.
      *
      * @param input input to permute
@@ -171,7 +177,7 @@ public class SPN  {
         return output;
     }
 
-    /*
+    /**
      * Initialize S-Box values
      */
     public void initializeSBox() {
@@ -193,7 +199,7 @@ public class SPN  {
         sBox.put("1111", "0111");    // F <=> 7
     }
 
-    /*
+    /**
      * Initialize cipher round keys
      */
     public void initializeKeys() {
@@ -205,7 +211,7 @@ public class SPN  {
         return decipherRoundKeys;
     }
 
-    /*
+    /**
      * Initialize decipher round keys
      */
     public void initializeDecipherKeys() {

@@ -1,3 +1,6 @@
+/**
+ * This class offers everything to build a randomized counter (CTR)
+ */
 public class CTR {
     private int r;
     private int n;
@@ -11,6 +14,16 @@ public class CTR {
     private Tools tools = new Tools();
     private int amountOfChiffreChunks;
 
+    /**
+     * Construct the CTR
+     *
+     * @param r The amount of rounds
+     * @param n The length of a plain text piece
+     * @param m The amount of plain text pieces
+     * @param s The length of the total key
+     * @param totalKey The encryption and decryption key
+     * @param chiffreText The text to decrypt
+     */
     public CTR(int r, int n, int m, int s, String totalKey, String chiffreText) {
         this.r = r;
         this.n = n;
@@ -23,6 +36,11 @@ public class CTR {
         spn = new SPN(r,n,m,s,totalKey);
     }
 
+    /**
+     * Build the y-1 to yn-1 array
+     *
+     * @return The array with all the chiffre code pieces
+     */
     public String[] getyArray() {
         int chunkLength = n * m;
         amountOfChiffreChunks = chiffreText.length() / chunkLength;
@@ -35,6 +53,11 @@ public class CTR {
         return yArray;
     }
 
+    /**
+     * Decrypt a text
+     *
+     * @return The enciphered String in binary representation
+     */
     public String decipher() {
         String[] yArray = getyArray();
         String yMinus1 = yArray[0];
@@ -57,7 +80,7 @@ public class CTR {
             plainText[i] = tools.xorStrings(storeSPNChunks[i],yArray[i+1]);
         }
 
-        String plainTextString = tools.convertArrayToStringMethod(plainText);
+        String plainTextString = tools.convertArrayToString(plainText);
 
         // Remove padding
         plainTextString = plainTextString.substring(0, plainTextString.lastIndexOf('1'));
