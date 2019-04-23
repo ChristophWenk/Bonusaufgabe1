@@ -9,7 +9,20 @@ public class CTRTest {
 
     @Test
     public void testDecipher() {
-        assertEquals("Gut gemacht!",ctr.decipher());
+        String plainText = ctr.decipher();
+
+        String[] asciiPackages = new String[plainText.length()/8];
+
+        for (int i = 0; i < asciiPackages.length; i++ ) {
+            asciiPackages[i] = plainText.substring(i*8, i*8 + 8);
+        }
+
+        String output = "";
+        for (String text : asciiPackages) {
+            output += tools.convertBinaryToASCII(text);
+        }
+
+        assertEquals("Gut gemacht!",output);
     }
 
 
