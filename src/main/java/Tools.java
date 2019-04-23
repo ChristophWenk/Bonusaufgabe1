@@ -48,6 +48,21 @@ public class Tools {
         return newY;
     }
 
+    public String convertBinaryToASCII(String binaryString) {
+        int binaryInt = Integer.parseInt(binaryString,2);
+        String str = Character.toString((char)binaryInt);
+
+        return str;
+    }
+
+    public static String convertArrayToStringMethod(String[] strArray) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < strArray.length; i++) {
+            stringBuilder.append(strArray[i]);
+        }
+        return stringBuilder.toString();
+    }
+
     public String yMinus1(){
         return fileContent.substring(0,16);
     }

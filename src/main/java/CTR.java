@@ -23,7 +23,6 @@ public class CTR {
         spn = new SPN(r,n,m,s,totalKey);
     }
 
-
     public String[] getyArray() {
         int chunkLength = n * m;
         amountOfChiffreChunks = chiffreText.length() / chunkLength;
@@ -36,24 +35,25 @@ public class CTR {
         return yArray;
     }
 
-
     public String[] decipher() {
         String[] yArray = getyArray();
         String yMinus1 = yArray[0];
-        String[] storeSPNChunks = new String[8];
+        // SPN output needs 1 less space because y-1 does not needed to be xor'd
+        String[] storeSPNChunks = new String[yArray.length - 1];
 
-        // Send all the chunks to the SPN
+        // Send all the chunks (y-1 + i) to the SPN to encrypt them
         String yn = yMinus1;
-        for (int i = 0; i < (8-1); i++) {
+        for (int i = 0; i < (yArray.length-1); i++) {
+            // Do not add anything for the first "real" round (y-1 + 0)
             if (i > 0) {
                 yn = tools.add1ToY(yn);
             }
             storeSPNChunks[i] = spn.encipher(yn);
         }
 
-        //Xor Chunks with y0...yn-1
-        String[] plainText = new String[8];
-        for (int i = 0; i < (8-1); i++) {
+        // Xor SPN output with chiffre text y0...yn-1
+        String[] plainText = new String[yArray.length - 1];
+        for (int i = 0; i < (yArray.length-1); i++) {
             plainText[i] = tools.xorStrings(storeSPNChunks[i],yArray[i+1]);
         }
 
