@@ -4,13 +4,11 @@ public class Program {
 
         Tools tools = new Tools();
 
-
         String chiffreText = tools.readChiffreText("src/main/resources/chiffre.txt");
         CTR ctr = new CTR(4,4,4,32,"00111010100101001101011000111111", chiffreText);
 
-
-        String[] klartext = ctr.decipher();
-        String plainText = tools.convertArrayToStringMethod(klartext);
+        String plainText = ctr.decipher();
+      //  String plainText = tools.convertArrayToStringMethod(klartext);
 
         String[] asciiPackages = new String[plainText.length()/8];
 

@@ -35,7 +35,7 @@ public class CTR {
         return yArray;
     }
 
-    public String[] decipher() {
+    public String decipher() {
         String[] yArray = getyArray();
         String yMinus1 = yArray[0];
         // SPN output needs 1 less space because y-1 does not needed to be xor'd
@@ -57,6 +57,11 @@ public class CTR {
             plainText[i] = tools.xorStrings(storeSPNChunks[i],yArray[i+1]);
         }
 
-        return plainText;
+        String plainTextString = tools.convertArrayToStringMethod(plainText);
+
+        // Remove padding
+        plainTextString = plainTextString.substring(0, plainTextString.lastIndexOf('1'));
+
+        return plainTextString;
     }
 }
