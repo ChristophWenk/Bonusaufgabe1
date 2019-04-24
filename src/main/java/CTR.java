@@ -2,11 +2,8 @@
  * This class offers everything to build a randomized counter (CTR)
  */
 public class CTR {
-    private int r;
     private int n;
     private int m;
-    private int s;
-    private String totalKey;
     private String chiffreText;
     private int rounds;
     private int bitLength;
@@ -25,11 +22,8 @@ public class CTR {
      * @param chiffreText The text to decrypt
      */
     public CTR(int r, int n, int m, int s, String totalKey, String chiffreText) {
-        this.r = r;
         this.n = n;
         this.m = m;
-        this.s = s;
-        this.totalKey = totalKey;
         this.chiffreText = new String(chiffreText);
         bitLength = m*n;
         rounds = chiffreText.length()/bitLength;
