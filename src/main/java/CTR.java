@@ -65,6 +65,8 @@ public class CTR {
             if (i > 0) {
                 yn = tools.add1ToY(yn);
             }
+            // Enciphering and deciphering work the same way in CTR mode.
+            // Therefore we can just use the SPN's encipher method.
             storeSPNChunks[i] = spn.encipher(yn);
         }
 
