@@ -65,9 +65,10 @@ public class CTR {
             if (i > 0) {
                 yn = tools.add1ToY(yn);
             }
+            String spnInput = tools.calculateModuloToBase2(yn);
             // Enciphering and deciphering work the same way in CTR mode.
             // Therefore we can just use the SPN's encipher method.
-            storeSPNChunks[i] = spn.encipher(yn);
+            storeSPNChunks[i] = spn.encipher(spnInput);
         }
 
         // Xor SPN output with chiffre text y0...yn-1

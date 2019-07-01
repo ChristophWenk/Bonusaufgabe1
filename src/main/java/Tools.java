@@ -39,14 +39,7 @@ public class Tools {
         String newY = Integer.toBinaryString(a);
 
         // Add missing zeroes to beginning of String
-        String missingZeroes = "";
-        if (newY.length() < y.length()) {
-            int difference = y.length() - newY.length();
-            for (int i = 0; i < difference; i++) {
-                missingZeroes += "0";
-            }
-        }
-        newY = missingZeroes + newY;
+        newY = getMissingZeroes(y, newY);
 
         return newY;
     }
@@ -127,14 +120,44 @@ public class Tools {
         String output = Integer.toBinaryString(c);
 
         // Add missing zeroes to beginning of String
+        output = getMissingZeroes(input1, output);
+        return output;
+    }
+
+    /**
+     * Calculates the modulo like this: input % 2^exponent
+     *
+     * @param input Input to be divided
+     * @return The rest resulting out of the modulo operation
+     */
+    public String calculateModuloToBase2(String input) {
+        int dividend = Integer.parseInt(input,2);
+        Double doubleResult = (dividend % Math.pow(2,input.length()));
+        int result = doubleResult.intValue();
+
+        String rest = Integer.toBinaryString(result);
+        rest = getMissingZeroes(input, rest);
+
+        return rest;
+    }
+
+    /**
+     * Add missing zeroes in front of the String to match the target length
+     *
+     * @param actualLength Length of the String that needs the missing zeroes
+     * @param targetLength Length that should be matched
+     * @return String with missing zeroes attached at the beginning
+     */
+    public String getMissingZeroes(String actualLength, String targetLength) {
+        // Add missing zeroes to beginning of String
         String missingZeroes = "";
-        if (output.length() < input1.length()) {
-            int difference = input1.length() - output.length();
+        if (targetLength.length() < actualLength.length()) {
+            int difference = actualLength.length() - targetLength.length();
             for (int i = 0; i < difference; i++) {
                 missingZeroes += "0";
             }
         }
-        output = missingZeroes + output;
-        return output;
+        targetLength = missingZeroes + targetLength;
+        return targetLength;
     }
 }

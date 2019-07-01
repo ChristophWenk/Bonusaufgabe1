@@ -29,7 +29,8 @@ public class ToolsTest {
         assertEquals("0000010011010010",tools.yMinus1());
     }
 
-    @Test public void testNormalizeText() {
+    @Test
+    public void testNormalizeText() {
         assertEquals(  "000001001101001000001011101110000000001010001\n" +
                                 "111100011100111111101100000010100010100001110\n" +
                                 "1000000001001101100111001010111011000010",
@@ -37,5 +38,11 @@ public class ToolsTest {
                           "000001001101001000001011101110000000001010001\n" +
                                 "111100011100111111101100000010100010100001110\n" +
                                 "10000000010011011001110010101110110000", 16));
+    }
+
+    @Test
+    public void testCalculateModulo() {
+        assertEquals("1110",tools.calculateModuloToBase2("1110"));
+        assertEquals("0000",tools.calculateModuloToBase2("0000"));
     }
 }
